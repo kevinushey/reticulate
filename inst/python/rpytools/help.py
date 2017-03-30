@@ -10,6 +10,14 @@ def isstring(s):
     # we use Python 2
     return isinstance(s, basestring)
 
+def isfloat(input):
+  try:
+    num = float(input)
+  except ValueError:
+    return False
+  return True
+ 
+
 
 def normalize_func(func):
     # convert class to __init__ method if we can
@@ -90,8 +98,8 @@ def get_r_representation(default):
     else:
       arg_value = "%r" % default
   
-  # if the value starts with "tf." then convert to $ usage
-  if (arg_value.startswith("tf.")):
+  # convert any "." to "$"
+  if not isfloat(arg_value):
     arg_value = arg_value.replace(".", "$")
       
   return(arg_value)
@@ -134,4 +142,6 @@ def generate_signature_for_function(func):
     if argspec.keywords:
       args_list.append("...")
     return "(" + ", ".join(args_list) + ")"
+
+
 
