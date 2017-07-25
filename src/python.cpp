@@ -802,6 +802,10 @@ SEXP py_to_r(PyObject* x, bool convert) {
           // PyTuple_SetItem steals reference to object created by PyInt_FromLong
           PyTuple_SetItem(pyArgs, 0, PyInt_FromLong(i));
           PyObjectPtr pyStr(PyObject_Call(itemFunc, pyArgs, NULL));
+          if (pyStr.is_null()) {
+            UNPROTECT(1);
+            stop(py_fetch_error());
+          }
           set_string_element(rArray, i, pyStr);
         }
         UNPROTECT(1);
